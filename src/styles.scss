@@ -1,1 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    color: #333;
+}
+
+.table {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item {
+    font-size: 0.9rem;
+}

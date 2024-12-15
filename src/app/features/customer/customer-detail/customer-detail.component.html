@@ -1,0 +1,290 @@
+<div class="container mt-5">
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="error" class="alert alert-danger text-center">{{ error }}</div>
+
+  <!-- Customer Details Card -->
+  <div *ngIf="customer" class="card shadow">
+    <!-- Card Header with Customer Title -->
+    <div class="card-header bg-primary text-white">
+      <h3>Customer Details</h3>
+    </div>
+
+    <!-- Card Body with Customer Information -->
+    <div class="card-body">
+      <!-- Customer Name and Email with Edit Button -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <h4 class="mb-0">{{ customer.firstName }} {{ customer.lastName }}</h4>
+          <p class="text-muted mb-0">
+            <strong>Email:</strong> {{ customer.email }}
+          </p>
+        </div>
+        <!-- Edit Customer Button -->
+        <button
+          class="btn btn-outline-primary btn-sm"
+          (click)="openEditModal()"
+        >
+          <i class="bi bi-pencil"></i> Edit
+        </button>
+      </div>
+
+      <!-- Credit Cards Section Header with Add Button -->
+      <div class="d-flex justify-content-between align-items-center mt-4 mb-2">
+        <h5 class="mb-0">Credit Cards</h5>
+        <button class="btn btn-success" (click)="openModal()">
+          <i class="bi bi-plus-circle"></i> Add Credit Card
+        </button>
+      </div>
+
+      <!-- Credit Card List -->
+      <ul
+        *ngIf="(customer?.creditCards ?? []).length > 0; else noCards"
+        class="list-group"
+      >
+        <li
+          *ngFor="let card of customer?.creditCards; let i = index"
+          class="list-group-item"
+        >
+          <div class="d-flex justify-content-between align-items-center">
+            <!-- Card Details -->
+            <div>
+              <h6 class="d-flex align-items-center gap-2">
+                <strong>Card Number:</strong> {{ card.cardNumber }}
+                <!-- Edit Credit Card Button -->
+                <button
+                  class="btn btn-sm btn-outline-secondary p-1"
+                  (click)="openEditCardModal(card)"
+                  title="Edit Card"
+                >
+                  <i class="bi bi-pencil"></i>
+                </button>
+              </h6>
+              <p>
+                <strong>Type:</strong> {{ card.cardType }} <br />
+                <strong>Expiry Date:</strong> {{ card.expirationDate }} <br />
+                <strong>CVV:</strong> {{ card.cvv }} <br />
+                <strong>Credit Limit:</strong>
+                {{ card.creditLimit | currency }} <br />
+                <strong>Current Balance:</strong>
+                {{ card.currentBalance | currency }}
+              </p>
+            </div>
+            <!-- Delete Credit Card Button -->
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteCreditCard(card.cardId, i)"
+            >
+              <i class="bi bi-trash"></i> Delete
+            </button>
+          </div>
+        </li>
+      </ul>
+
+      <!-- Message for No Credit Cards -->
+      <ng-template #noCards>
+        <div class="text-muted">
+          No credit cards available for this customer.
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Footer with Back to List Button -->
+    <div class="card-footer text-end">
+      <a routerLink="/customers" class="btn btn-secondary">Back to List</a>
+    </div>
+  </div>
+
+  <!-- Add Credit Card Modal -->
+  <div class="modal" tabindex="-1" [ngClass]="{ 'show d-block': isModalOpen }">
+    <div class="modal-dialog">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Credit Card</h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="closeModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Add Credit Card Form -->
+          <form [formGroup]="creditCardForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Card Number</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="cardNumber"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Expiration Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="expirationDate"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" formControlName="cvv" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Card Type</label>
+              <select class="form-select" formControlName="cardType">
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Credit Limit</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="creditLimit"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Current Balance</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="currentBalance"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Customer Modal -->
+  <div
+    class="modal"
+    tabindex="-1"
+    [ngClass]="{ 'show d-block': isEditModalOpen }"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Customer</h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="closeEditModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Customer Form -->
+          <form [formGroup]="editCustomerForm" (ngSubmit)="onEditSubmit()">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First Name</label>
+              <input
+                id="firstName"
+                type="text"
+                class="form-control"
+                formControlName="firstName"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input
+                id="lastName"
+                type="text"
+                class="form-control"
+                formControlName="lastName"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Credit Card Modal -->
+  <div
+    class="modal"
+    tabindex="-1"
+    [ngClass]="{ 'show d-block': isEditCardModalOpen }"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit Credit Card</h5>
+          <button
+            type="button"
+            class="btn-close"
+            (click)="closeEditCardModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <!-- Edit Credit Card Form -->
+          <form [formGroup]="editCardForm" (ngSubmit)="onEditCardSubmit()">
+            <div class="mb-3">
+              <label class="form-label">Card Number</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="cardNumber"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Expiration Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="expirationDate"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" formControlName="cvv" />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Card Type</label>
+              <select class="form-select" formControlName="cardType">
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Credit Limit</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="creditLimit"
+              />
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Current Balance</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="currentBalance"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

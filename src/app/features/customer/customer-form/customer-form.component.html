@@ -1,0 +1,173 @@
+<div class="container mt-5">
+  <!-- Page Title -->
+  <h2 class="mb-4 text-center">Create Customer</h2>
+
+  <!-- Customer Creation Form -->
+  <form [formGroup]="customerForm" (ngSubmit)="onSubmit()">
+    <!-- Customer Name Section -->
+    <div class="row">
+      <!-- First Name Input Field -->
+      <div class="col-md-6 mb-3">
+        <label for="firstName" class="form-label">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          class="form-control"
+          formControlName="firstName"
+          placeholder="Enter first name"
+        />
+        <!-- Validation Message: Displayed when the field is invalid and touched -->
+        <div
+          *ngIf="
+            customerForm.get('firstName')?.touched &&
+            customerForm.get('firstName')?.invalid
+          "
+          class="text-danger"
+        >
+          First name is required.
+        </div>
+      </div>
+
+      <!-- Last Name Input Field -->
+      <div class="col-md-6 mb-3">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input
+          id="lastName"
+          type="text"
+          class="form-control"
+          formControlName="lastName"
+          placeholder="Enter last name"
+        />
+        <!-- Validation Message: Displayed when the field is invalid and touched -->
+        <div
+          *ngIf="
+            customerForm.get('lastName')?.touched &&
+            customerForm.get('lastName')?.invalid
+          "
+          class="text-danger"
+        >
+          Last name is required.
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Input Field -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        id="email"
+        type="email"
+        class="form-control"
+        formControlName="email"
+        placeholder="Enter email"
+      />
+      <!-- Validation Message: Displayed when the email field is invalid -->
+      <div
+        *ngIf="
+          customerForm.get('email')?.touched &&
+          customerForm.get('email')?.invalid
+        "
+        class="text-danger"
+      >
+        Valid email is required.
+      </div>
+    </div>
+
+    <!-- Credit Cards Section -->
+    <div class="mb-3">
+      <h4>Credit Cards</h4>
+
+      <!-- Loop through each credit card form group -->
+      <div
+        *ngFor="let card of creditCards.controls; let i = index"
+        class="mb-3"
+      >
+        <!-- Individual Credit Card Form -->
+        <div [formGroup]="asFormGroup(card)" class="card p-3 mb-2">
+          <div class="row">
+            <!-- Card Number Input -->
+            <div class="col-md-4">
+              <label class="form-label">Card Number</label>
+              <input
+                type="text"
+                class="form-control"
+                formControlName="cardNumber"
+              />
+            </div>
+
+            <!-- Expiration Date Input -->
+            <div class="col-md-4">
+              <label class="form-label">Expiration Date</label>
+              <input
+                type="date"
+                class="form-control"
+                formControlName="expirationDate"
+              />
+            </div>
+
+            <!-- CVV Input -->
+            <div class="col-md-2">
+              <label class="form-label">CVV</label>
+              <input type="text" class="form-control" formControlName="cvv" />
+            </div>
+
+            <!-- Card Type Dropdown -->
+            <div class="col-md-2">
+              <label class="form-label">Card Type</label>
+              <select class="form-select" formControlName="cardType">
+                <option value="Credit">Credit</option>
+                <option value="Debit">Debit</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mt-2">
+            <!-- Credit Limit Input -->
+            <div class="col-md-6">
+              <label class="form-label">Credit Limit</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="creditLimit"
+              />
+            </div>
+
+            <!-- Current Balance Input -->
+            <div class="col-md-6">
+              <label class="form-label">Current Balance</label>
+              <input
+                type="number"
+                class="form-control"
+                formControlName="currentBalance"
+              />
+            </div>
+          </div>
+
+          <!-- Remove Credit Card Button -->
+          <button
+            type="button"
+            class="btn btn-danger mt-2"
+            (click)="removeCreditCard(i)"
+          >
+            Remove Card
+          </button>
+        </div>
+      </div>
+
+      <!-- Add Credit Card Button -->
+      <button type="button" class="btn btn-secondary" (click)="addCreditCard()">
+        Add Credit Card
+      </button>
+    </div>
+
+    <!-- Form Buttons -->
+    <div class="d-flex justify-content-end">
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-primary me-2">Save</button>
+      <!-- Cancel Button -->
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

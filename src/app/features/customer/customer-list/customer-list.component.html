@@ -1,0 +1,121 @@
+<div class="container mt-5">
+  <!-- Page Title -->
+  <h2 class="mb-4 text-center">Customer List</h2>
+
+  <!-- Success Message: Displays a success notification when an action succeeds -->
+  <div
+    *ngIf="successMessage"
+    class="alert alert-success text-center"
+    role="alert"
+  >
+    {{ successMessage }}
+  </div>
+
+  <!-- Error Message: Displays an error notification when an action fails -->
+  <div *ngIf="errorMessage" class="alert alert-danger text-center" role="alert">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Button to Add a New Customer -->
+  <div class="d-flex justify-content-end mb-3">
+    <a routerLink="/customers/form" class="btn btn-success btn-lg">
+      <i class="bi bi-person-plus"></i> Add Customer
+    </a>
+  </div>
+
+  <!-- Loading Spinner: Shown while data is being fetched -->
+  <div *ngIf="isLoading" class="text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <!-- General Error Message: Shown when there is an error fetching the data -->
+  <div *ngIf="error" class="alert alert-danger text-center" role="alert">
+    {{ error }}
+  </div>
+
+  <!-- Customer Table: Displays the list of customers -->
+  <div *ngIf="!isLoading && !error">
+    <table class="table table-hover table-bordered align-middle">
+      <!-- Table Header -->
+      <thead class="table-dark">
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Credit Cards</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <!-- Table Body -->
+      <tbody>
+        <!-- Iterate over the list of customers -->
+        <tr *ngFor="let customer of customers; let i = index">
+          <!-- Row Index -->
+          <td>{{ i + 1 }}</td>
+          <!-- Customer First Name -->
+          <td>{{ customer.firstName }}</td>
+          <!-- Customer Last Name -->
+          <td>{{ customer.lastName }}</td>
+          <!-- Customer Email -->
+          <td>{{ customer.email }}</td>
+
+          <!-- Credit Cards Section -->
+          <td>
+            <!-- If the customer has credit cards, display them in a list -->
+            <div
+              *ngIf="customer.creditCards && customer.creditCards.length > 0"
+            >
+              <ul class="list-group list-group-flush">
+                <!-- Iterate over each credit card -->
+                <li
+                  *ngFor="let card of customer.creditCards"
+                  class="list-group-item d-flex justify-content-between align-items-center"
+                >
+                  <!-- Display card number -->
+                  {{ card.cardNumber }}
+                  <!-- Display card type as a badge -->
+                  <span class="badge bg-info">{{ card.cardType }}</span>
+                </li>
+              </ul>
+            </div>
+            <!-- If the customer has no credit cards -->
+            <div
+              *ngIf="!customer.creditCards || customer.creditCards.length === 0"
+            >
+              <span class="text-muted">No Credit Cards</span>
+            </div>
+          </td>
+
+          <!-- Actions Column -->
+          <td>
+            <!-- Delete Button: Deletes a customer -->
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="
+                deleteCustomer(
+                  customer.customerId,
+                  customer.firstName,
+                  customer.lastName
+                )
+              "
+            >
+              <i class="bi bi-trash"></i> Delete
+            </button>
+
+            <!-- More Info Button: Navigates to the customer's detailed view -->
+            <a
+              [routerLink]="['/customers', customer.customerId]"
+              class="btn btn-info btn-sm"
+            >
+              <i class="bi bi-info-circle"></i> More Info
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
