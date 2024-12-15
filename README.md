@@ -1,59 +1,103 @@
-# CreditCardManagement
+# Credit Card Management Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.5.
+This project is the **frontend application** for managing customers and their associated credit cards. It is built with **Angular** and styled with **Bootstrap** for responsive design. The frontend integrates seamlessly with the [Credit Card Management API](https://github.com/StevenRBC/credit-card-api).
 
-## Development server
+---
 
-To start a local development server, run:
+## Features
+- **Customer Management**: Add, view, edit, and delete customers.
+- **Credit Card Management**: Add, view, edit, and delete credit cards.
+- **Dynamic Forms**: Forms for creating and updating data.
+- **Responsive Design**: Optimized for desktop and mobile devices.
 
+---
+
+## Prerequisites
+Before running the project, ensure you have the following installed:
+- **Node.js** (v18 or higher) - [Download](https://nodejs.org/)
+- **Angular CLI** (v15 or higher) - Install using:
+  ```bash
+  npm install -g @angular/cli
+  ```
+- **Docker** (optional for containerized deployment)
+
+---
+
+## Project Structure
+```plaintext
+credit-card-management-frontend/
+├── src/
+│   ├── app/               # Main Angular application
+│   │   ├── features/      # Feature modules
+│   │   ├── core/          # Services, models, and utilities
+│   │   └── shared/        # Shared components and modules
+│   ├── assets/            # Static files and icons
+│   └── index.html         # Main entry point
+├── angular.json           # Angular project configuration
+├── Dockerfile             # Dockerfile for production deployment
+├── package.json           # Project dependencies
+└── README.md              # Project documentation
+```
+
+---
+
+## Running the Project
+
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd credit-card-management-frontend
+```
+
+### 2. Install Dependencies
+Install all project dependencies using:
+```bash
+npm install
+```
+
+### 3. Run the Application Locally
+Start the Angular development server with:
 ```bash
 ng serve
 ```
+The application will be accessible at **`http://localhost:4200`**.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Ensure the backend API is running at **`http://localhost:8080`**. 
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Integration with Backend
+The frontend interacts with the backend REST API. Make sure the backend is up and running at the specified API URL.
 
-```bash
-ng generate component component-name
-```
+**Backend Repository**: [Credit Card Management API](https://github.com/StevenRBC/credit-card-api)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## Key Pages
+1. **Customer List**: View all customers and their credit cards.
+2. **Customer Form**: Create or edit customer details.
+3. **Customer Details**: View customer information and manage credit cards.
+4. **Credit Card Management**: Add, update, or delete credit cards.
 
-## Building
+---
 
-To build the project run:
+## Author
+**Steven Rodriguez**
 
-```bash
-ng build
-```
+---
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Acknowledgments
+- **Angular** for frontend development.
+- **Bootstrap** for responsive design.
+- **Docker** for containerization.
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
+## Notes
+For any questions or issues, feel free to open an issue in the repository.
 
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
