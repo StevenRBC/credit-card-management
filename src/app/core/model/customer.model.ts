@@ -9,7 +9,7 @@ export interface Customer {
    * Unique identifier for the customer.
    * Example: 1, 2, 3
    */
-  customerId: number;
+  customerId?: number;
 
   /**
    * First name of the customer.
